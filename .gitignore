@@ -1,0 +1,21 @@
+﻿# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+
+# Artefakty
+out/
+scam_hunter_out/
+*.zip
+
+# Konfiguracje i sekrety
+.env
+.env.*
+config*.json
+*.session
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68,<76", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scamgeo-banking"
+version = "0.1.0"
+description = "Scam_Geo Banking — skaner i pipeline artefaktów dla kanałów TG i źródeł web"
+requires-python = ">=3.11"
+readme = "README.md"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q --import-mode=importlib"
