@@ -1,0 +1,18 @@
+Metadata-Version: 2.2
+Name: scamgeo-banking
+Version: 0.1.0
+Summary: Scam_Geo Banking — skaner i pipeline artefaktów dla kanałów TG i źródeł web
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+
+﻿@"
+# Scam_Geo
+OSINT/Anti-Fraud toolkit for scam detection & evidence packaging.
+
+## Dev
+```bash
+python -m venv .venv
+. .venv/Scripts/activate  # Win
+# source .venv/bin/activate  # Linux/Mac
+pip install -e .
+scamgeo version

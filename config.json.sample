@@ -1,0 +1,30 @@
+{
+  "case_id": "demo-case",
+  "out_dir": "out/demo-case",
+  "sources": {
+    "telegram": [
+      "t.me/somechannel",
+      "t.me/anotherchannel"
+    ],
+    "youtube": [
+      "https://www.youtube.com/@example"
+    ],
+    "tiktok": []
+  },
+  "limits": {
+    "rate_per_min": 30,
+    "retry_max": 5,
+    "timeout_sec": 20
+  },
+  "integrations": {
+    "splunk_hec": {
+      "url": "",
+      "token": ""
+    },
+    "elastic": {
+      "url": "",
+      "user": "",
+      "password": ""
+    }
+  }
+}

@@ -8,7 +8,6 @@ from urllib.parse import urlparse
 
 import requests
 
-__all__ = ["enrich_reputation"]
 
 URL_RE = re.compile(r"https?://[^\s,]+", re.I)
 
@@ -17,6 +16,7 @@ def _read_urls_from_csv(path: Path) -> Set[str]:
     urls: Set[str] = set()
     with path.open("r", encoding="utf-8", newline="") as f:
         rd = csv.DictReader(f)
+        # szukamy kolumny "url" lub próbujemy wyciągać z "title"/"source"
         for row in rd:
             if "url" in row and row["url"]:
                 urls.add(row["url"])
@@ -37,10 +37,17 @@ def _domain_from_url(u: str) -> str:
 
 
 def _vt_lookup(u: str, api_key: str, timeout: float = 8.0) -> Dict[str, str]:
+    """
+    Minimalne VT: sprawdzamy url/ analiza reputacji przez v3 (jeśli jest klucz).
+    Jeśli brak klucza/limit/exception -> zwracamy stub ze skrótem SHA256.
+    """
     if not api_key:
         return {"vt_status": "no_key", "vt_votes": "", "vt_link": ""}
     try:
         headers = {"x-apikey": api_key}
+        # VT wymaga najpierw submit/lookup – tu robimy prosty GET do „urls” (hashowane wg VT)
+        # Hash dla endpointu /urls/{id} to url_id = base64_urlsafe(url). Ale uprośćmy:
+        # użyjemy /search jako fallback:
         r = requests.get(
             "https://www.virustotal.com/api/v3/search",
             params={"query": u},
@@ -76,17 +83,11 @@ def _otx_lookup(domain: str, api_key: str, timeout: float = 8.0) -> Dict[str, st
         return {"otx_status": f"exc_{type(e).__name__}", "otx_pulses": "", "otx_link": ""}
 
 
-def enrich_reputation(
-    inputs: Iterable[Path],
-    out_dir: Path,
-    *,
-    vt_key: str | None,
-    otx_key: str | None,
-) -> Path:
+def enrich_reputation(inputs: Iterable[Path], out_dir: Path, *, vt_key: str | None, otx_key: str | None) -> Path:
     """
-    Z wejściowych CSV wybiera URL-e i robi minimalny lookup VT/OTX (fallback przy braku kluczy).
-    Zwraca out/web_reputation.csv z kolumnami:
-    url, domain, vt_status, vt_votes, vt_link, otx_status, otx_pulses, otx_link, sha256
+    inputs: list CSV z kolumną `url`
+    wyjście: out/web_reputation.csv z kolumnami:
+      url, domain, vt_status, vt_votes, vt_link, otx_status, otx_pulses, otx_link, sha256
     """
     all_urls: Set[str] = set()
     for p in inputs:
@@ -117,5 +118,6 @@ def enrich_reputation(
     out = out_dir / "web_reputation.csv"
     out.parent.mkdir(parents=True, exist_ok=True)
     with out.open("w", newline="", encoding="utf-8") as f:
-        csv.writer(f).writerows(rows)
+        w = csv.writer(f)
+        w.writerows(rows)
     return out
