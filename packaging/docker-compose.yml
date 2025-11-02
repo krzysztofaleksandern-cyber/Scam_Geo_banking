@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: packaging/Dockerfile
+    container_name: scamgeo_app
+    environment:
+      - VT_API_KEY
+      - OTX_API_KEY
+      - URLSCAN_API_KEY
+    volumes:
+      - ../data:/data
+      - ../configs:/configs
+    restart: unless-stopped

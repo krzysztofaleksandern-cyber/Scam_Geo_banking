@@ -1,0 +1,12 @@
+﻿scanner:
+  concurrency_total: 50
+  concurrency_per_host: 3
+  js_rendering: true
+  max_depth: 2
+  timeout_sec: 15
+sources:
+  urlhaus: true
+  openphish: true
+  phishtank: true
+  urlscan: true
+  commoncrawl: false

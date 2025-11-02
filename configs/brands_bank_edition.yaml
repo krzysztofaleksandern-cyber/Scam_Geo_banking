@@ -1,0 +1,7 @@
+﻿brands:
+  - name: "Erste"
+    patterns: ["erste","sparkasse","george","erstebank"]
+    domains_trusted: ["erstebank.at","sparkasse.at","george.at"]
+  - name: "Raiffeisen"
+    patterns: ["raiffeisen","rbi","mein-elba"]
+    domains_trusted: ["raiffeisen.at","rbinternational.com"]
